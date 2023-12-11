@@ -5,11 +5,26 @@ class HybridEncryptor {
     private static final int SPLIT_PARTS = 4;
     private static final String SEPARATOR = " ";
 
+    private static final long P_1 = 104147;
+    private static final long Q_1 = 104123;
+
+    private static final long P_2 = 104119;
+    private static final long Q_2 = 104113;
+
+    private static final long P_3 = 104683;
+    private static final long Q_3 = 102071;
+
+    private static final long P_4 = 100537;
+    private static final long Q_4 = 100549;
+
+    private static final long[] P_ARRAY = {P_1, P_2, P_3, P_4};
+    private static final long[] Q_ARRAY = {Q_1, Q_2, Q_3, Q_4};
+
     private RSA rsa;
     private String key;
 
-    public HybridEncryptor(String symmetricKey, int firstPrime, int secondPrime, int publicKey) {
-        this.rsa = new RSA(firstPrime, secondPrime, publicKey);
+    public HybridEncryptor(String symmetricKey, long publicKey) {
+        this.rsa = new RSA(P_1, Q_1, publicKey);
         this.key = symmetricKey;
     }
 
@@ -18,6 +33,27 @@ class HybridEncryptor {
         this.key = symmetricKey;
     }
 
+    public static String encryptDistinct(String text, String[] keywords, long[] publicKeys) throws InterruptedException {
+        String[] subtexts = splitText(text);
+        String result = "";
+        for (int i = 0; i < subtexts.length; i++) {
+            String vigenereText = Vigenere.encrypt(subtexts[i], keywords[i]);
+            RSA partitionRSA = new RSA(P_ARRAY[i], Q_ARRAY[i], publicKeys[i]);
+            result += partitionRSA.encrypt(vigenereText);
+        }
+        return result;
+    }
+
+    public static String decryptDistinct(String cypherText, String[] keywords, long[] publicKeys) throws InterruptedException {
+        String[] cypherSubtexts = splitRSAText(cypherText);
+        String result = "";
+        for (int i = 0; i < cypherSubtexts.length; i++) {
+            RSA partitionRSA = new RSA(P_ARRAY[i], Q_ARRAY[i], publicKeys[i]);
+            String partialResult = partitionRSA.decrypt(cypherSubtexts[i]);
+            result += Vigenere.decrypt(partialResult, keywords[i]);
+        }
+        return result;
+    }
     public String encrypt(String text) throws InterruptedException {
         String[] subtexts = splitText(text);
         EncryptThread[] encryptThreads = new EncryptThread[subtexts.length];

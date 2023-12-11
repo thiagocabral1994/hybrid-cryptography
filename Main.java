@@ -16,17 +16,22 @@ class Main {
                     Affirmatis amentur ángere impétu, impetum intéllégat medeam propositum, quaerimus sentió solám utens!
                 """;
         String key = "Lorem ipsum amét 123!#?";
-        HybridEncryptor hybridEncryptor = new HybridEncryptor(key, 104147, 104123, 4421);
+        HybridEncryptor hybridEncryptor = new HybridEncryptor(key, 4421);
+        String[] keywords = { "Lorem ipsum amét 123!#?", "nmaskdjh1230954", "245!@#test-123", "Coding is my passion" };
+        long[] publicKeys = { 4421, 4421, 4421, 4421 };
         // RSA rsa = new rsa(2749, 2621, 4421);
         // HybridEncryptor hybridEncryptor = new HybridEncryptor(key, rsa);
 
-        String encryptText = hybridEncryptor.encrypt(text);
+        // String encryptText = hybridEncryptor.encrypt(text);
+        String encryptText = HybridEncryptor.encryptDistinct(text, keywords, publicKeys);
         System.out.println("Crypt================================");
         System.out.println(encryptText);
 
-        String originalText = hybridEncryptor.decrypt(encryptText);
+        System.out.println("\n\n");
+
+        // String originalText = hybridEncryptor.decrypt(encryptText);
+        String originalText = HybridEncryptor.decryptDistinct(encryptText, keywords, publicKeys);
         System.out.println("Decrypt================================");
         System.out.println(originalText);
     }
 }
-
