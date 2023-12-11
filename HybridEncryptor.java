@@ -33,24 +33,24 @@ class HybridEncryptor {
         this.key = symmetricKey;
     }
 
-    public static String encryptDistinct(String text, String[] keywords, long[] publicKeys) throws InterruptedException {
+    public static String encryptDistinct(String text, String[] symmetricKeys, long[] publicKeys) throws InterruptedException {
         String[] subtexts = splitText(text);
         String result = "";
         for (int i = 0; i < subtexts.length; i++) {
-            String vigenereText = Vigenere.encrypt(subtexts[i], keywords[i]);
+            String vigenereText = Vigenere.encrypt(subtexts[i], symmetricKeys[i]);
             RSA partitionRSA = new RSA(P_ARRAY[i], Q_ARRAY[i], publicKeys[i]);
             result += partitionRSA.encrypt(vigenereText);
         }
         return result;
     }
 
-    public static String decryptDistinct(String cypherText, String[] keywords, long[] publicKeys) throws InterruptedException {
+    public static String decryptDistinct(String cypherText, String[] symmetricKeys, long[] publicKeys) throws InterruptedException {
         String[] cypherSubtexts = splitRSAText(cypherText);
         String result = "";
         for (int i = 0; i < cypherSubtexts.length; i++) {
             RSA partitionRSA = new RSA(P_ARRAY[i], Q_ARRAY[i], publicKeys[i]);
             String partialResult = partitionRSA.decrypt(cypherSubtexts[i]);
-            result += Vigenere.decrypt(partialResult, keywords[i]);
+            result += Vigenere.decrypt(partialResult, symmetricKeys[i]);
         }
         return result;
     }
