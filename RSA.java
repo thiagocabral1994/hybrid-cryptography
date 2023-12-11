@@ -3,13 +3,13 @@ import java.math.BigInteger;
 public class RSA {
     private static final String SEPARATOR = " ";
 
-    private int p;
-    private int q;
-    private int n;
+    private long p;
+    private long q;
+    private long n;
     private long e;
     private long d;
 
-    public RSA(int p, int q, long e) {
+    public RSA(long p, long q, long e) {
         this.p = p;
         this.q = q;
         this.n = p * q;
@@ -18,7 +18,7 @@ public class RSA {
     }
 
     private long calculatePrivateKey() {
-        int phi = (p - 1) * (q - 1);
+        long phi = (p - 1) * (q - 1);
         BigInteger eBigInteger = BigInteger.valueOf(e);
         BigInteger phiBigInteger = BigInteger.valueOf(phi);
         BigInteger dBigInteger = eBigInteger.modInverse(phiBigInteger);

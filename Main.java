@@ -16,7 +16,7 @@ class Main {
                     Affirmatis amentur ángere impétu, impetum intéllégat medeam propositum, quaerimus sentió solám utens!
                 """;
         String key = "Lorem ipsum amét 123!#?";
-        HybridEncryptor hybridEncryptor = new HybridEncryptor(key, 2749, 2621, 4421);
+        HybridEncryptor hybridEncryptor = new HybridEncryptor(key, 104147, 104123, 4421);
         // RSA rsa = new rsa(2749, 2621, 4421);
         // HybridEncryptor hybridEncryptor = new HybridEncryptor(key, rsa);
 
