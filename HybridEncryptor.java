@@ -56,6 +56,16 @@ class HybridEncryptor {
     }
     public String encrypt(String text) throws InterruptedException {
         String[] subtexts = splitText(text);
+        String result = "";
+        for (int i = 0; i < subtexts.length; i++) {
+            String vigenereText = Vigenere.encrypt(subtexts[i], this.key);
+            result += this.rsa.encrypt(vigenereText);
+        }
+        return result;
+    }
+
+    public String encryptAsync(String text) throws InterruptedException {
+        String[] subtexts = splitText(text);
         EncryptThread[] encryptThreads = new EncryptThread[subtexts.length];
 
         for (int i = 0; i < encryptThreads.length; i++) {
@@ -74,7 +84,7 @@ class HybridEncryptor {
         return encryptText;
     }
 
-    public String decrypt(String encryptText) throws InterruptedException {
+    public String decryptAsync(String encryptText) throws InterruptedException {
         String[] encryptSubtexts = splitRSAText(encryptText);
         DecryptThread[] decryptThreads = new DecryptThread[encryptSubtexts.length];
         for (int i = 0; i < decryptThreads.length; i++) {
@@ -90,6 +100,16 @@ class HybridEncryptor {
             originalText += thread.getMessage();
         }
         return originalText;
+    }
+
+    public String decrypt(String encryptText) throws InterruptedException {
+        String[] cypherSubtexts = splitRSAText(encryptText);
+        String result = "";
+        for (int i = 0; i < cypherSubtexts.length; i++) {
+            String partialResult = this.rsa.decrypt(cypherSubtexts[i]);
+            result += Vigenere.decrypt(partialResult, this.key);
+        }
+        return result;
     }
 
     private static String[] splitText(String text) {

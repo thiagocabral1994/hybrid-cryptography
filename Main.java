@@ -19,19 +19,33 @@ class Main {
         HybridEncryptor hybridEncryptor = new HybridEncryptor(key, 4421);
         String[] keywords = { "Lorem ipsum amét 123!#?", "nmaskdjh1230954", "245!@#test-123", "Coding is my passion" };
         long[] publicKeys = { 4421, 27947, 19819, 18911 };
-        // RSA rsa = new rsa(2749, 2621, 4421);
-        // HybridEncryptor hybridEncryptor = new HybridEncryptor(key, rsa);
+        RSA rsa = new RSA(2749, 2621, 4421);
 
+        long startEncryptRSA = System.nanoTime();
+        String encryptTextRSA = rsa.encrypt(text);
+        long endEncryptRSA = System.nanoTime();
+
+        long startEncryptHybrid = System.nanoTime();
         String encryptText = hybridEncryptor.encrypt(text);
+        long endEncryptHybrid = System.nanoTime();
 
+        long startEncryptDistinct = System.nanoTime();
         String encryptTextDistinct = HybridEncryptor.encryptDistinct(text, keywords, publicKeys);
+        long endEncryptDistinct = System.nanoTime();
         System.out.println("Crypt================================");
         System.out.println(encryptText);
 
         System.out.println("\n\n");
 
+        long startDecryptHybrid = System.nanoTime();
         String originalText = hybridEncryptor.decrypt(encryptText);
+        long endDecryptHybrid = System.nanoTime();
+        long startDecryptDistinct = System.nanoTime();
         String originalTextDistinct = HybridEncryptor.decryptDistinct(encryptTextDistinct, keywords, publicKeys);
+        long endDecryptDistinct = System.nanoTime();
+        long startDecryptRSA = System.nanoTime();
+        String originalTextRSA = rsa.decrypt(encryptTextRSA);
+        long endDecryptRSA = System.nanoTime();
         System.out.println("Decrypt================================");
         System.out.println(originalText);
 
@@ -39,5 +53,14 @@ class Main {
 
         System.out.println("EncryptedText equals EncryptTextDistinct " + encryptText.equals(encryptTextDistinct));
         System.out.println("OriginalText equals OriginalTextDistinct " + originalText.equals(originalTextDistinct));
+
+        System.out.println("Cifra: RSA: " + (endEncryptRSA - startEncryptRSA));
+        System.out.println("Decifra: RSA: " + (endDecryptRSA - startDecryptRSA));
+
+        System.out.println("Cifra: Paralelo com chave em conjunto 1: " + (endEncryptHybrid - startEncryptHybrid));
+        System.out.println("Decifra: Paralelo com chave em conjunto 1: " + (endDecryptHybrid - startDecryptHybrid));
+
+        System.out.println("Cifra: Paralelo com chave distinta 2: " + (endEncryptDistinct - startEncryptDistinct));
+        System.out.println("Decifra: Paralelo com chave distinta 2: " + (endDecryptDistinct - startDecryptDistinct));
     }
 }
