@@ -1,0 +1,9 @@
+INSTRUÇÕES
+
+Compilar: javac *.java
+Rodar: java Main
+
+
+Favor verificar a classe HybridEncryptor. Nela contam as constantes arbritrárias para a execução do algoritmo.
+Elas podem ser alteradas para verificação de diferentes resultados.
+
